@@ -5,7 +5,6 @@ import com.backendcoders.stockcontroller.users.responses.UserResponse
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,8 +27,10 @@ class UserController(val service: UserService) {
 
 
     @GetMapping("/users")
-    fun listAll(@RequestParam sortDir:String? = null) =
-        service.findAll()
+    fun listAll(@RequestParam sortDir:String?=null) =
+        service.findAll(SortDir.findOrThrow(sortDir?:"ASC"))
+            .map { UserResponse(it) }
+            .let { ResponseEntity.ok(it) }
 
     @GetMapping("/{id}")
     fun getByID(@PathVariable id:Long) =
@@ -38,7 +39,7 @@ class UserController(val service: UserService) {
 
     @DeleteMapping("/{id}")
     fun deleteById(@PathVariable id:Long) =
-        service.deleteById(id)?.let {it}
+        service.delete(id)?.let{it}
 
     @PutMapping("/{id}")
     fun update(@PathVariable id:Long, user:CreateUserRequest)=

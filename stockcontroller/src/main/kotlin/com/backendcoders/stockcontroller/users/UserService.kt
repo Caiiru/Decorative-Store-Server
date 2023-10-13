@@ -1,5 +1,6 @@
 package com.backendcoders.stockcontroller.users
 
+import com.backendcoders.stockcontroller.exception.BadRequestException
 import com.backendcoders.stockcontroller.exception.NotFoundException
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
@@ -11,9 +12,14 @@ class UserService(val repository: UserRepository) {
 
 
     fun insert(user: User):User {
-        return repository.save(user)
-            .also { log.info("User {} inserted ", user.id) }
-
+        if(repository.findByEmail(user.email) == null) {
+            return repository.save(user)
+                .also { log.info("User {} inserted ", user.id) }
+        }
+        else{
+            log.info("User Already Exists")
+           throw BadRequestException("User Already Exists!")
+        }
     }
 
     fun findAll(dir: SortDir = SortDir.ASC):List<User> = when(dir){
@@ -24,7 +30,20 @@ class UserService(val repository: UserRepository) {
     fun findByIdOrNull(id:Long) = repository.findById(id).getOrNull()
     private fun findByIdOrThrow(id:Long) = findByIdOrNull(id)?: throw NotFoundException(id)
 
-    fun deleteById(id:Long) = repository.deleteById(id)
+    private fun findByEmailOrNull(email:String):String?{
+        var users = repository.findAll()
+        for (u: User in users){
+            if(u.email == email)
+                return email
+        }
+        return null
+    }
+    fun delete(id:Long):Boolean{
+        val user = findByIdOrNull(id)?:return false.also { throw NotFoundException(id) }
+        log.info("User {} deleted", user.id)
+        repository.delete(user)
+        return true
+    }
     companion object {
         private val log = LoggerFactory.getLogger(UserService::class.java)
     }

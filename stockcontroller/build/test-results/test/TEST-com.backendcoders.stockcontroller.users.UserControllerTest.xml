@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.backendcoders.stockcontroller.users.UserControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-10-13T01:39:19" hostname="DESKTOP-DDS3ILN" time="0.633">
+  <properties/>
+  <testcase name="listAll must have ASC by default()" classname="com.backendcoders.stockcontroller.users.UserControllerTest" time="0.633"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
