@@ -44,9 +44,6 @@ class UserService(val repository: UserRepository) {
         repository.delete(user)
         return true
     }
-    companion object {
-        private val log = LoggerFactory.getLogger(UserService::class.java)
-    }
     fun update(id: Long, user:User):User?{
         val newUser = findByIdOrThrow(id)
         if(user == newUser) return null
@@ -56,8 +53,8 @@ class UserService(val repository: UserRepository) {
         newUser.password = user.password;
 
         return repository.save(newUser)
-
     }
-
-
+    companion object {
+        private val log = LoggerFactory.getLogger(UserService::class.java)
+    }
 }

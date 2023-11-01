@@ -1,5 +1,7 @@
 package com.backendcoders.stockcontroller.users
 
+import com.backendcoders.stockcontroller.roles.Role
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -22,6 +24,19 @@ class User (
 
 
     var password: String,
-    var name: String
+    var name: String,
 
+
+    @ManyToMany
+    @JoinTable(
+        name="UserRole",
+        joinColumns = [JoinColumn(name = "idUser")],
+        inverseJoinColumns = [JoinColumn(name = "idRole")]
+        )
+    val roles: MutableSet<Role> = mutableSetOf()
 )
+{
+    @get:JsonIgnore
+    @get:Transient
+    val isAdmin:Boolean get() = roles.any {it.name == "ADMIN"}
+}

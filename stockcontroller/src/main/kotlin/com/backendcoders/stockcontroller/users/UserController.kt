@@ -38,12 +38,16 @@ class UserController(val service: UserService) {
             ?:let { ResponseEntity.notFound().build() }
 
     @DeleteMapping("/{id}")
-    fun deleteById(@PathVariable id:Long) =
-        service.delete(id)?.let{it}
+    fun deleteById(@PathVariable id:Long):ResponseEntity<Void> =
+        if(service.delete(id)) ResponseEntity.ok().build()
+        else ResponseEntity.notFound().build()
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id:Long, user:CreateUserRequest)=
-        service.update(id,user.toUser())
+    fun update(@PathVariable id:Long, user:CreateUserRequest):ResponseEntity<UserResponse> {
+        return service.update(id,user.toUser())
+            ?.let { ResponseEntity.ok(UserResponse(it)) }
+            ?: ResponseEntity.noContent().build()
+    }
 
     companion object{
         val log = LoggerFactory.getLogger(UserController::class.java)
