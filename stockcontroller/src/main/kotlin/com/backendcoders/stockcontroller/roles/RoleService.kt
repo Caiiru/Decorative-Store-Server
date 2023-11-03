@@ -1,7 +1,12 @@
 package com.backendcoders.stockcontroller.roles
 
 import com.backendcoders.stockcontroller.exception.BadRequestException
+import com.backendcoders.stockcontroller.exception.NotFoundException
+import com.backendcoders.stockcontroller.users.SortDir
 import org.slf4j.LoggerFactory
+import org.springframework.data.domain.Sort
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -11,12 +16,17 @@ class RoleService (val repository:RoleRepository){
         if(name.isNullOrBlank()) return null
         var roles = repository.findAll()
         for(r:Role in roles){
-            if(r.name == name){
+            log.info(r.name)
+            if(r.name == name.uppercase()){
                 return r
             }
         }
 
         return null
+    }
+
+    fun findByIdOrNull(id:Long):Role?{
+        return repository.findByIdOrNull(id)
     }
 
 
@@ -26,11 +36,26 @@ class RoleService (val repository:RoleRepository){
             throw BadRequestException("Role Already Exists!").also { log.info("Role Already Exists {}" , role.name) }
         }
         else{
-            return repository.save(role).also { log.info("Role {} created: {}",role.id,role.name) }
+            var newRole = role;
+            newRole.name = role.name.uppercase()
+            return repository.save(newRole).also { log.info("Role {} created: {}",role.id,role.name) }
         }
     }
 
+    fun findAll(dir:SortDir = SortDir.ASC):List<Role> =
+        when(dir){
+            SortDir.ASC -> repository.findAll(Sort.by("name").ascending())
+            SortDir.DESC -> repository.findAll(Sort.by("name").descending())
+        }
 
+
+
+    fun deleteById(id:Long):Boolean{
+        val role = findByIdOrNull(id)?:return false.also { throw NotFoundException(id) }
+        log.info("Role (id: {}) {} deleted", role.id,role.name)
+        repository.delete(role)
+        return true
+    }
     companion object{
         private val log = LoggerFactory.getLogger(RoleService::class.java)
     }

@@ -2,13 +2,17 @@ package com.backendcoders.stockcontroller.users
 
 import com.backendcoders.stockcontroller.exception.BadRequestException
 import com.backendcoders.stockcontroller.exception.NotFoundException
+import com.backendcoders.stockcontroller.roles.RoleRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
 @Service
-class UserService(val repository: UserRepository) {
+class UserService(
+    val repository: UserRepository,
+    val roleRepository: RoleRepository
+    ) {
 
 
     fun insert(user: User):User {
@@ -54,6 +58,23 @@ class UserService(val repository: UserRepository) {
 
         return repository.save(newUser)
     }
+
+    fun addRole(id:Long, roleName:String):Boolean{
+        val user = findByIdOrThrow(id)
+        if(user.roles.any{it.name == roleName}) return false
+
+        val role = roleRepository.findByName(roleName)?:
+            throw BadRequestException("Invalid role: $roleName").also {
+                log.info("Invalid role: $roleName")
+            }
+
+        user.roles.add(role)
+        repository.save(user)
+        log.info("Granted role {} to user {}", role.name, user.id)
+        return true
+    }
+    fun findByRole(role:String):List<User> = repository.findByRole(role)
+
     companion object {
         private val log = LoggerFactory.getLogger(UserService::class.java)
     }

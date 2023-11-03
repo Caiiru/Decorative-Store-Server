@@ -48,6 +48,13 @@ class UserController(val service: UserService) {
             ?.let { ResponseEntity.ok(UserResponse(it)) }
             ?: ResponseEntity.noContent().build()
     }
+    @PutMapping("/{id}/roles/{role}")
+    fun grant(@PathVariable id:Long, @PathVariable role:String):ResponseEntity<Void> =
+        if(service.addRole(id,role.uppercase())){
+            ResponseEntity.ok().build()
+        }else{
+            ResponseEntity.noContent().build()
+        }
 
     companion object{
         val log = LoggerFactory.getLogger(UserController::class.java)

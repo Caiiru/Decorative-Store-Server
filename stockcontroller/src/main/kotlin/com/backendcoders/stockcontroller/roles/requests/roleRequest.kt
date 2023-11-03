@@ -2,11 +2,14 @@ package com.backendcoders.stockcontroller.roles.requests
 
 import com.backendcoders.stockcontroller.roles.Role
 import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.Pattern
 
-class roleRequest (
+data class roleRequest (
     @field:NotBlank
+    @Pattern(regexp = "^[A-Z][A-Z0-9]+\$")
     val name:String,
 
+    @NotBlank
     val description:String
 
 ){

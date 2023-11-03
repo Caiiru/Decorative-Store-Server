@@ -13,7 +13,7 @@ class Role (
     val id:Long?=null,
 
     @Column(unique = true, nullable = false)
-    val name:String,
+    var name:String,
 
     @Column(nullable = false)
     val description:String = "",

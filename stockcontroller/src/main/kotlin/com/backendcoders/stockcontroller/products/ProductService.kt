@@ -25,7 +25,7 @@ class ProductService(val repository: ProductRepository) {
 
 
     fun findByIdOrNull(id: Long):Product? {
-        return repository.findById(id.toLong()).getOrNull()
+        return repository.findById(id).getOrNull()
     }
     fun findByIdOrThrow(id: Long) = findByIdOrNull(id) ?: throw NotFoundException(id);
     fun findByName(name:String?):Product?{

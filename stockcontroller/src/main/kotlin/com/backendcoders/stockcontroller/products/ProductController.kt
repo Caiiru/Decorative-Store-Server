@@ -47,7 +47,7 @@ class ProductController(val service: ProductService) {
         else ResponseEntity.notFound().build()
 
     @DeleteMapping("/{name}")
-    fun deleteByname(@PathVariable name:String):ResponseEntity<Void> =
+    fun deleteByName(@PathVariable name:String):ResponseEntity<Void> =
         if(service.deleteByName(name)) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 

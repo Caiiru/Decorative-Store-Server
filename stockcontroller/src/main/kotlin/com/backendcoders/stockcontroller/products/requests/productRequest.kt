@@ -3,7 +3,7 @@ package com.backendcoders.stockcontroller.products.requests
 import com.backendcoders.stockcontroller.products.Product
 import jakarta.validation.constraints.NotBlank
 
-class productRequest (
+data class productRequest (
     @field:NotBlank
     val name:String,
 

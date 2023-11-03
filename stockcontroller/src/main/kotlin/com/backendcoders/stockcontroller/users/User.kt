@@ -11,6 +11,7 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import jakarta.persistence.Transient
+import jakarta.validation.constraints.NotBlank
 
 @Entity
 @Table(name = "tblUser")
@@ -18,13 +19,13 @@ class User (
     @Id @GeneratedValue
     var id: Long? = null,
 
-
+    var name: String = "",
     @Column(unique = true)
-    var email: String,
+    var email: String = "",
 
 
-    var password: String,
-    var name: String,
+    var password: String = "",
+
 
 
     @ManyToMany
@@ -36,6 +37,7 @@ class User (
     val roles: MutableSet<Role> = mutableSetOf()
 )
 {
+
     @get:JsonIgnore
     @get:Transient
     val isAdmin:Boolean get() = roles.any {it.name == "ADMIN"}
