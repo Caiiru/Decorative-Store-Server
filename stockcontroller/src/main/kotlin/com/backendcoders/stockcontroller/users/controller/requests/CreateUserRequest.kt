@@ -1,4 +1,4 @@
-package com.backendcoders.stockcontroller.users.requests
+package com.backendcoders.stockcontroller.users.controller.requests
 
 import com.backendcoders.stockcontroller.users.User
 import jakarta.validation.constraints.Email

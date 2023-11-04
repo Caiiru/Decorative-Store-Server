@@ -1,4 +1,4 @@
-package com.backendcoders.stockcontroller.users.responses
+package com.backendcoders.stockcontroller.users.controller.responses
 
 import com.backendcoders.stockcontroller.users.User
 

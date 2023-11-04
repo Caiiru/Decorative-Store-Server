@@ -12,7 +12,6 @@ import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import java.net.Authenticator
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.util.Date

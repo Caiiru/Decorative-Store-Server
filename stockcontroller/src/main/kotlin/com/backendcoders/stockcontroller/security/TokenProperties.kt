@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.bind.ConstructorBinding
+import org.springframework.context.annotation.Bean
 
 @ConfigurationProperties("security.token")
 data class TokenProperties @ConstructorBinding constructor(

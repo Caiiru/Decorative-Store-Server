@@ -3,6 +3,9 @@ package com.backendcoders.stockcontroller.users
 import com.backendcoders.stockcontroller.exception.BadRequestException
 import com.backendcoders.stockcontroller.exception.NotFoundException
 import com.backendcoders.stockcontroller.roles.RoleRepository
+import com.backendcoders.stockcontroller.security.Jwt
+import com.backendcoders.stockcontroller.users.controller.responses.LoginResponse
+import com.backendcoders.stockcontroller.users.controller.responses.UserResponse
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
@@ -11,7 +14,8 @@ import kotlin.jvm.optionals.getOrNull
 @Service
 class UserService(
     val repository: UserRepository,
-    val roleRepository: RoleRepository
+    val roleRepository: RoleRepository,
+    val jwt: Jwt
     ) {
 
 
@@ -44,8 +48,12 @@ class UserService(
     }
     fun delete(id:Long):Boolean{
         val user = findByIdOrNull(id)?:return false.also { throw NotFoundException(id) }
-        log.info("User {} deleted", user.id)
+        if(user.roles.any(){it.name == "ADMIN"}){
+            val count = repository.findByRole("ADMIN").size
+            if (count == 1 ) throw BadRequestException("Cannot delete the last system administrator!")
+        }
         repository.delete(user)
+        log.info("User {} deleted", user.id)
         return true
     }
     fun update(id: Long, user:User):User?{
@@ -72,6 +80,14 @@ class UserService(
         repository.save(user)
         log.info("Granted role {} to user {}", role.name, user.id)
         return true
+    }
+
+    fun login(email:String, password:String): LoginResponse?{
+        val user = repository.findByEmail(email) ?: return null
+        if(user.password != password) return null
+
+        log.info("User logged in. id={}, name={}", user.id,user.name)
+        return LoginResponse(token = jwt.createToken(user), user = UserResponse(user))
     }
     fun findByRole(role:String):List<User> = repository.findByRole(role)
 

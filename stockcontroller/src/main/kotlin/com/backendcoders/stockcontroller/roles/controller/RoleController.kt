@@ -1,11 +1,12 @@
-package com.backendcoders.stockcontroller.roles
+package com.backendcoders.stockcontroller.roles.controller
 
-import com.backendcoders.stockcontroller.roles.requests.roleRequest
+import com.backendcoders.stockcontroller.roles.RoleService
+import com.backendcoders.stockcontroller.roles.controller.requests.roleRequest
+import com.backendcoders.stockcontroller.roles.controller.responses.RoleResponse
 import com.backendcoders.stockcontroller.users.SortDir
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -19,16 +20,16 @@ class RoleController (val service: RoleService) {
 
     @GetMapping("/roles/{name}")
     fun getByName(@PathVariable name:String) = service.findByNameOrNull(name)?.
-            let { ResponseEntity.ok(it) }?:let { ResponseEntity.notFound().build() }
+            let { ResponseEntity.ok(RoleResponse(it)) }?:let { ResponseEntity.notFound().build() }
 
     @GetMapping("/{id}")
     fun getById(@PathVariable id:Long) = service.findByIdOrNull(id)?.
-            let{ResponseEntity.ok(it)} ?: let{ResponseEntity.notFound().build()}
+            let{ResponseEntity.ok(RoleResponse(it))} ?: let{ResponseEntity.notFound().build()}
 
     @GetMapping("/roles")
     fun listAll(@RequestParam sortDir: String?=null) =
         service.findAll(SortDir.findOrThrow(sortDir?:"ASC"))
-            .map{ it }
+            .map{ RoleResponse(it) }
             .let{ResponseEntity.ok(it)
             }
 

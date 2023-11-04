@@ -1,4 +1,4 @@
-package com.backendcoders.stockcontroller.roles.requests
+package com.backendcoders.stockcontroller.roles.controller.requests
 
 import com.backendcoders.stockcontroller.roles.Role
 import jakarta.validation.constraints.NotBlank

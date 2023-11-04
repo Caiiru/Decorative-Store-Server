@@ -1,7 +1,9 @@
-package com.backendcoders.stockcontroller.users
+package com.backendcoders.stockcontroller.users.controller
 
-import com.backendcoders.stockcontroller.users.requests.CreateUserRequest
-import com.backendcoders.stockcontroller.users.responses.UserResponse
+import com.backendcoders.stockcontroller.users.SortDir
+import com.backendcoders.stockcontroller.users.UserService
+import com.backendcoders.stockcontroller.users.controller.requests.CreateUserRequest
+import com.backendcoders.stockcontroller.users.controller.responses.UserResponse
 import jakarta.validation.Valid
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -28,7 +30,7 @@ class UserController(val service: UserService) {
 
     @GetMapping("/users")
     fun listAll(@RequestParam sortDir:String?=null) =
-        service.findAll(SortDir.findOrThrow(sortDir?:"ASC"))
+        service.findAll(SortDir.findOrThrow(sortDir ?: "ASC"))
             .map { UserResponse(it) }
             .let { ResponseEntity.ok(it) }
 
@@ -43,7 +45,7 @@ class UserController(val service: UserService) {
         else ResponseEntity.notFound().build()
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id:Long, user:CreateUserRequest):ResponseEntity<UserResponse> {
+    fun update(@PathVariable id:Long, user: CreateUserRequest):ResponseEntity<UserResponse> {
         return service.update(id,user.toUser())
             ?.let { ResponseEntity.ok(UserResponse(it)) }
             ?: ResponseEntity.noContent().build()

@@ -1,25 +1,20 @@
 package com.backendcoders.stockcontroller.users
 
 import com.backendcoders.stockcontroller.exception.NotFoundException
-import com.backendcoders.stockcontroller.users.requests.CreateUserRequest
-import com.backendcoders.stockcontroller.users.responses.UserResponse
+import com.backendcoders.stockcontroller.users.controller.requests.CreateUserRequest
+import com.backendcoders.stockcontroller.users.controller.responses.UserResponse
 import io.kotest.matchers.shouldBe
 import io.mockk.checkUnnecessaryStub
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
-import org.apache.coyote.Response
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
-import com.backendcoders.stockcontroller.users.Stubs
 import com.backendcoders.stockcontroller.users.Stubs.userStub
-import io.kotest.assertions.any
-import io.kotest.matchers.throwable.shouldHaveMessage
+import com.backendcoders.stockcontroller.users.controller.UserController
 import org.junit.jupiter.api.assertThrows
-import java.util.Optional
 
 class UserControllerTest {
 
@@ -123,7 +118,8 @@ class UserControllerTest {
         with(controller.update(1, CreateUserRequest(
             "email2@email.com",
             "SDWQ@!123",
-            "Miguelito"))){
+            "Miguelito")
+        )){
             statusCode shouldBe HttpStatus.NO_CONTENT
             body shouldBe null
         }
@@ -137,7 +133,8 @@ class UserControllerTest {
             "email2@email.com",
             "SDWQ@!123",
             "Miguelito"
-        ))){
+        )
+        )){
             statusCode shouldBe HttpStatus.OK
             body shouldBe UserResponse(user)
         }
