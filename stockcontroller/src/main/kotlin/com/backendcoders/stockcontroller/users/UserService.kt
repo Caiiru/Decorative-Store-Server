@@ -56,13 +56,10 @@ class UserService(
         log.info("User {} deleted", user.id)
         return true
     }
-    fun update(id: Long, user:User):User?{
+    fun update(id: Long, name:String):User?{
         val newUser = findByIdOrThrow(id)
-        if(user == newUser) return null
-
-        newUser.name = user.name
-        newUser.email = user.email
-        newUser.password = user.password;
+        if(newUser.name == name) return null
+        newUser.name = name
 
         return repository.save(newUser)
     }
