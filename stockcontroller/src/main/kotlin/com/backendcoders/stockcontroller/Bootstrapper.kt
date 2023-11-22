@@ -21,8 +21,9 @@ class Bootstrapper(
                 roleRepository.findByName("ADMIN")?:
                 roleRepository.save(Role(name="ADMIN", description = "System Administrator"))
                     .also {
-                        roleRepository.save(Role(name = "USER", description = "Normal User"))
-                        log.info("ADMIN and USER roles created")
+                        roleRepository.save(Role(name = "EMPLOYEE", description = "Employee User "))
+                        roleRepository.save(Role(name = "CLIENT", description = "Client User"))
+                        log.info("Admin, Employee and Client roles are created")
                     }
         if(userRepository.findByRole("ADMIN").isEmpty()){
             adminUser.roles.add(adminRole)

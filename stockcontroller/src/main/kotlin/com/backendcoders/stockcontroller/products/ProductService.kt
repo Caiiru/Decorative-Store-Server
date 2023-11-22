@@ -13,7 +13,7 @@ class ProductService(val repository: ProductRepository) {
     fun insert(product: Product):Product{
         val findProduct = findByName(product.name);
         if(findProduct != null){
-            findProduct.qtd += product.qtd
+            findProduct.quantity += product.quantity
             log.info("Adicionando mais uma unidade do produto {}", product.name)
             return repository.save(findProduct)
 
@@ -64,7 +64,7 @@ class ProductService(val repository: ProductRepository) {
         if(product == newProduct) return null
 
         newProduct.name = product.name
-        newProduct.qtd = product.qtd
+        newProduct.quantity = product.quantity
         newProduct.description = product.description
 
         return repository.save(newProduct)

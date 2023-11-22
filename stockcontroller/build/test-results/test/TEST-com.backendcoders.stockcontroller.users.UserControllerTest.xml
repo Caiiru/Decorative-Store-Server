@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.backendcoders.stockcontroller.users.UserControllerTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-11-22T14:03:25" hostname="DESKTOP-DDS3ILN" time="0.42">
+  <properties/>
+  <testcase name="insert must return a code when insert()" classname="com.backendcoders.stockcontroller.users.UserControllerTest" time="0.42"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

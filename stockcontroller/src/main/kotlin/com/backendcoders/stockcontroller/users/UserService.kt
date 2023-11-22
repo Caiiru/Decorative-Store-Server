@@ -38,6 +38,16 @@ class UserService(
     fun findByIdOrNull(id:Long) = repository.findById(id).getOrNull()
     private fun findByIdOrThrow(id:Long) = findByIdOrNull(id)?: throw NotFoundException(id)
 
+    public fun findByName(name:String):User?{
+        if(name.isNullOrBlank()) return null
+        var users = repository.findAll()
+        for(u : User in users){
+            if(u.name == name){
+                return u
+            }
+        }
+        return null
+    }
     private fun findByEmailOrNull(email:String):String?{
         var users = repository.findAll()
         for (u: User in users){

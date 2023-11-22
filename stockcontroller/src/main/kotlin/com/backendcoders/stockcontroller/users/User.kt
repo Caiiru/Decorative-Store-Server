@@ -26,8 +26,6 @@ class User (
 
     var password: String = "",
 
-
-
     @ManyToMany
     @JoinTable(
         name="UserRole",

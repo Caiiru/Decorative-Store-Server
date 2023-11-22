@@ -21,12 +21,14 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/users")
 class UserController(val service: UserService) {
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/users")
     fun insert (@Valid @RequestBody user: CreateUserRequest) =
         UserResponse(service.insert(user.toUser())).
                 let { ResponseEntity.status(HttpStatus.CREATED).body(it) }
 
-
+    @SecurityRequirement(name="StockController")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     @GetMapping()
     fun listAll(@RequestParam sortDir:String?=null, @RequestParam role:String? = null) =
         if(role == null){
@@ -36,6 +38,8 @@ class UserController(val service: UserService) {
             service.findByRole(role.uppercase())
         }.map { UserResponse(it) }.let { ResponseEntity.ok(it) }
 
+    @SecurityRequirement(name="StockController")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     @GetMapping("/{id}")
     fun getByID(@PathVariable id:Long) =
         service.findByIdOrNull(id)?.let{ResponseEntity.ok(UserResponse(it)) }
@@ -59,6 +63,9 @@ class UserController(val service: UserService) {
             ?.let{ ResponseEntity.ok(UserResponse(it)) }
             ?:ResponseEntity.noContent().build()
     }
+
+    @SecurityRequirement(name="StockController")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/roles/{role}")
     fun grant(@PathVariable id:Long, @PathVariable role:String):ResponseEntity<Void> =
         if(service.addRole(id,role.uppercase())){

@@ -14,7 +14,7 @@ data class productRequest (
 ){
     fun toProduct() = Product(
         name = name!!,
-        qtd = qtd!!,
+        quantity = qtd!!,
         description = description
     )
 }

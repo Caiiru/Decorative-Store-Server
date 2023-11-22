@@ -1,6 +1,7 @@
 package com.backendcoders.stockcontroller.users
 
 import com.backendcoders.stockcontroller.exception.NotFoundException
+import com.backendcoders.stockcontroller.users.Stubs.authStub
 import com.backendcoders.stockcontroller.users.controller.requests.CreateUserRequest
 import com.backendcoders.stockcontroller.users.controller.responses.UserResponse
 import io.kotest.matchers.shouldBe
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import com.backendcoders.stockcontroller.users.Stubs.userStub
 import com.backendcoders.stockcontroller.users.controller.UserController
+import com.backendcoders.stockcontroller.users.controller.requests.PatchUserRequest
 import org.junit.jupiter.api.assertThrows
 
 class UserControllerTest {
@@ -101,7 +103,7 @@ class UserControllerTest {
     }
 
     @Test
-    fun `deleteById must return notFound if user doenst exists`(){
+    fun `deleteById must return notFound if user doesnt exists`(){
         every{
             serviceMock.delete(1)
         } returns false
@@ -113,40 +115,24 @@ class UserControllerTest {
 
     @Test
     fun `update must return NO CONTENT if the service returns null`(){
-        val user= userStub(id=1)
-        every { serviceMock.update(1,any()) } returns null
-        with(controller.update(1, CreateUserRequest(
-            "email2@email.com",
-            "SDWQ@!123",
-            "Miguelito")
-        )){
+        val user = userStub(1)
+        every {serviceMock.update(user.id!!,user.name)} returns null
+        with(controller.update(user.id!!, PatchUserRequest(user.name), authStub(user))){
             statusCode shouldBe HttpStatus.NO_CONTENT
             body shouldBe null
         }
     }
-
     @Test
-    fun `update must update if user is updating himself`(){
-        val user = userStub(id = 3, nome = "Maiquin")
-        every { serviceMock.update(3,any()) }returns user
-        with(controller.update(3, CreateUserRequest(
-            "email2@email.com",
-            "SDWQ@!123",
-            "Miguelito"
-        )
-        )){
+    fun `update should work if the user is trying to update himself`(){
+        val user = userStub(1)
+        every{serviceMock.update(1,"NomeUsuario")} returns user
+        with(controller.update(1, PatchUserRequest(user.name), authStub(user))){
             statusCode shouldBe HttpStatus.OK
             body shouldBe UserResponse(user)
         }
     }
 
-    @Test
-    fun `update must throw NOT FOUND EXCEPTION if the user doenst exists`(){
-        val user = userStub(1)
-        every { serviceMock.update(1,any()) } throws NotFoundException()
-        assertThrows<NotFoundException> {
-            controller.update(1, CreateUserRequest(user.email,user.password,user.name))
-        }
-    }
+
+
 
 }

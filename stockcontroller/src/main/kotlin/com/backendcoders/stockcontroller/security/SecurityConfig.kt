@@ -51,7 +51,10 @@ class SecurityConfig(val jwtTokenFilter: JwtTokenFilter) {
                     requests
                         .requestMatchers(antMatcher(HttpMethod.GET)).permitAll()
                         .requestMatchers(mvc.pattern(HttpMethod.POST, "/users")).permitAll()
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/users/login")).permitAll()
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/roles")).hasRole("ADMIN")
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/products")).hasAnyRole("ADMIN","EMPLOYEE")
+                        .requestMatchers(mvc.pattern(HttpMethod.PUT, "/products")).hasAnyRole("ADMIN","EMPLOYEE")
+                        .requestMatchers(mvc.pattern(HttpMethod.DELETE, "/products")).hasAnyRole("ADMIN","EMPLOYEE")                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/users/login")).permitAll()
                         .requestMatchers(antMatcher("/h2-console/**")).permitAll()
                         .anyRequest().authenticated()
                 }

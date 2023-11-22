@@ -11,7 +11,14 @@ import jakarta.persistence.Table
 class Product (
     @Id @GeneratedValue
     var id: Long? = null,
+
+    @Column(unique = true, nullable = false)
     var name:String,
+    @Column(nullable = false)
     var description:String? = null,
-    var qtd:Int = 1
-)
+    @Column(nullable = false)
+    var quantity:Int = 1,
+
+
+
+    )
