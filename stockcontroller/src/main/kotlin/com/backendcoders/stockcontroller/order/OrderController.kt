@@ -36,7 +36,7 @@ class OrderController (val service:OrderService){
     @SecurityRequirement(name="StockController")
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/productorders")
-    fun listAllProductOrders() = service.listAll().map { it }.let { ResponseEntity.ok(it) }
+    fun listAllProductOrders() = service.listAllProductOrders().map { it }.let { ResponseEntity.ok(it) }
 
     @SecurityRequirement(name="StockController")
     @PreAuthorize("hasRole('ADMIN')")
@@ -68,6 +68,7 @@ class OrderController (val service:OrderService){
         return service.productOrderUpdate(id,orderProduct)?.let { ResponseEntity.ok(it) }
             ?:ResponseEntity.noContent().build()
     }
+
 
 
 }

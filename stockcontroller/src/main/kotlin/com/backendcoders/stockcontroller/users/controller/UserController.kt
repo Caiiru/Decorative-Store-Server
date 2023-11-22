@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/users")
 class UserController(val service: UserService) {
-
-    @PreAuthorize("permitAll()")
+    @SecurityRequirement(name="StockController")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     @PostMapping("/users")
     fun insert (@Valid @RequestBody user: CreateUserRequest) =
         UserResponse(service.insert(user.toUser())).
@@ -55,7 +55,9 @@ class UserController(val service: UserService) {
     @SecurityRequirement(name="StockController")
     @PreAuthorize("permitAll()")
     @PatchMapping("/{id}")
-    fun update(@PathVariable id:Long,@Valid @RequestBody request:PatchUserRequest,auth:Authentication):ResponseEntity<UserResponse> {
+    fun update(@PathVariable id:Long,
+               @Valid @RequestBody request:PatchUserRequest,
+               auth:Authentication):ResponseEntity<UserResponse> {
         val token = auth.principal as? UserToken ?: throw ForbiddenException()
         if(token.id != id && !token.isAdmin) throw ForbiddenException()
 

@@ -46,11 +46,11 @@ class ProductService(val repository: ProductRepository) {
 
         }
 
-    fun delete(id:Long):Boolean {
-        val product = findByIdOrNull(id)?:return false.also { throw NotFoundException(id) }
+    fun delete(id:Long):Boolean? {
+        val product = findByIdOrNull(id)?: throw NotFoundException(id)
         log.info("Product (id: {}) {} deleted", product.id,product.name )
         repository.delete(product)
-        return true
+        return false
     }
     fun deleteByName(name:String):Boolean{
         val product = findByName(name)?:return  false.also { throw NotFoundException(name) }
@@ -69,7 +69,6 @@ class ProductService(val repository: ProductRepository) {
 
         return repository.save(newProduct)
     }
-
 
     companion object{
         private val log = LoggerFactory.getLogger(ProductService::class.java)

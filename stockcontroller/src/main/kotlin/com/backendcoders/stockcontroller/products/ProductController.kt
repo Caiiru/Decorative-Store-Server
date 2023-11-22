@@ -1,11 +1,15 @@
 package com.backendcoders.stockcontroller.products
 
+import com.backendcoders.stockcontroller.exception.ForbiddenException
 import com.backendcoders.stockcontroller.products.requests.productRequest
+import com.backendcoders.stockcontroller.security.UserToken
 import com.backendcoders.stockcontroller.users.SortDir
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -55,8 +59,8 @@ class ProductController(val service: ProductService) {
     @SecurityRequirement(name="StockController")
     @PreAuthorize("hasRole('ADMIN') or hasRole('EMPLOYEE')")
     @DeleteMapping("/deleteById/{id}")
-    fun deleteById(@PathVariable id:Long):ResponseEntity<Void> =
-        if(service.delete(id)) ResponseEntity.ok().build()
+    fun deleteById(@PathVariable id:Long): ResponseEntity<Boolean> =
+        if(service.delete(id) == true) ResponseEntity.ok().build()
         else ResponseEntity.notFound().build()
 
 

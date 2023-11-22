@@ -11,6 +11,7 @@ import jakarta.persistence.JoinTable
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.Table
 import jakarta.validation.constraints.NotBlank
+import java.util.Date
 
 @Entity
 @Table(name="TblOrder")
@@ -22,5 +23,7 @@ data class Order (
     @NotBlank
     var userID:Long?=null,
 
+    @NotBlank
+    var date:String?=null
     )
 

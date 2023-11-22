@@ -11,7 +11,12 @@ import com.backendcoders.stockcontroller.users.UserRepository
 import com.backendcoders.stockcontroller.users.UserService
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.stereotype.Service
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 import java.util.logging.Logger
 import kotlin.jvm.optionals.getOrNull
 
@@ -28,7 +33,9 @@ class OrderService (
         val user = userRepository.findByIdOrNull(order.userID) ?: throw NotFoundException("User not found");
         //Pegar a lista de id dos produtos
         val products = order.products
-        val OrderSave = Order(userID = order.userID)
+        val sdf = SimpleDateFormat("dd/M/yyyy HH:mm:ss")
+        val currentDate = sdf.format(Date())
+        val orderSave = Order(userID = order.userID, date = currentDate)
         for((id,quantidade) in products) {
             val product = productRepository.findByIdOrNull(id)?: throw BadRequestException("Product id not found")
             if(product.quantity < quantidade){
@@ -36,13 +43,14 @@ class OrderService (
                 break;
             }
         }
+        orderRepository.save(orderSave)
         for((id,quantidade) in products){
             val product = productRepository.findByIdOrNull(id)?: throw BadRequestException("Product id not found")
-            val orderProductSave:OrderProduct = OrderProduct(ProductId = id, OrderId = OrderSave.userID, quantity = quantidade)
+            val orderProductSave:OrderProduct = OrderProduct(ProductId = id, OrderId = orderSave.id, quantity = quantidade)
             orderProductRepository.save(orderProductSave)
+            product.quantity -= orderProductSave.quantity!!
         }
-        orderRepository.save(OrderSave)
-        log.info("Order created, User: {} Order: {}", OrderSave.userID, OrderSave.id)
+        log.info("Order created, User: {} Order: {}", orderSave.userID, orderSave.id)
     }
 
     fun listAll():List<Order> = orderRepository.findAll()
@@ -60,6 +68,8 @@ class OrderService (
         if(order==newOrder) return null
 
         newOrder.userID = order.userID
+        newOrder.date = order.date
+
 
         return orderRepository.save(newOrder)
     }

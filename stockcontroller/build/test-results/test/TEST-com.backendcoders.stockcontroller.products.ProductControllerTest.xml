@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.backendcoders.stockcontroller.products.ProductControllerTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2023-11-22T22:46:22" hostname="DESKTOP-DDS3ILN" time="0.859">
+  <properties/>
+  <testcase name="Insert Product must return a code when product is inserted()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.342"/>
+  <testcase name="listAll must have ASC by default()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.462"/>
+  <testcase name="deleteByName must return ok if product was deleted()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.005"/>
+  <testcase name="deleteById must return ok if product was deleted()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.005"/>
+  <testcase name="getById must return NotFound if product doenst exist()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.004"/>
+  <testcase name="getByID must return the product passed by id()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.006"/>
+  <testcase name="deleteById must return notFound if product doesnt exists()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.004"/>
+  <testcase name="deleteByName must return notFound if product doesnt exists()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.004"/>
+  <testcase name="update must return NO CONTENT if the service retuns null()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.006"/>
+  <testcase name="listAll must return all products with the given parameter()" classname="com.backendcoders.stockcontroller.products.ProductControllerTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
