@@ -1,2 +1,3 @@
-# Decorative Store Server
- A backend server for an event decorations company
+# Decorative StockController 
+
+Link Video Youtube: https://youtu.be/qNxmqiYE0Q0
